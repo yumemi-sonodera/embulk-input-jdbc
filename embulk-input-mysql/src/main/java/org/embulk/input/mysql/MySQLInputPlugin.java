@@ -71,7 +71,7 @@ public class MySQLInputPlugin
     {
         MySQLPluginTask t = (MySQLPluginTask) task;
 
-        this.loadMySqlJdbcDriver("com.mysql.jdbc.Driver", t.getDriverPath());
+        this.loadMySqlJdbcDriver("com.mysql.cj.jdbc.Driver", t.getDriverPath());
 
         String url = String.format("jdbc:mysql://%s:%d/%s",
                 t.getHost(), t.getPort(), t.getDatabase());
@@ -159,7 +159,7 @@ public class MySQLInputPlugin
         // Here implements a workaround as as workaround.
         Field f = null;
         try {
-            Class<?> timeUtilClass = Class.forName("com.mysql.jdbc.TimeUtil");
+            Class<?> timeUtilClass = Class.forName("com.mysql.cj.util.TimeUtil");
             f = timeUtilClass.getDeclaredField("timeZoneMappings");
             f.setAccessible(true);
 
@@ -167,7 +167,7 @@ public class MySQLInputPlugin
             if (timeZoneMappings == null) {
                 timeZoneMappings = new Properties();
                 synchronized (timeUtilClass) {
-                    timeZoneMappings.load(this.getClass().getResourceAsStream("/com/mysql/jdbc/TimeZoneMapping.properties"));
+                    timeZoneMappings.load(this.getClass().getResourceAsStream("/com/mysql/cj/util/TimeZoneMapping.properties"));
                 }
                 f.set(null, timeZoneMappings);
             }
